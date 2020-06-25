@@ -1,0 +1,17 @@
+{
+  "name": "face_recognition_ai_backend",
+  "version": "1.0.0",
+  "description": "Backend for the Face Recognition AI",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {    
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"},
+  "devDependencies": {
+    "nodemon" : "^2.0.4"
+  }
+}
