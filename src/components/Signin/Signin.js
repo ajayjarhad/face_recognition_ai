@@ -10,24 +10,28 @@ constructor(props) {
     }
 
 onSignInEmail=(event)=>{
-this.setState({signInEmail: event.target.value})
+    this.setState({signInEmail: event.target.value})
 }
 onSignInPassword=(event)=>{
-    this.setState({signInPassword:event.target.value})
+    this.setState({signInPassword: event.target.value})
 }
 onSubmit=()=>{
-   fetch('http://localhost:3001/signin',{
-       method: 'POST',
+   fetch('http://localhost:3434/signin',{
+       method: 'post',
        headers:{'Content-Type': 'application/json'},
        body: JSON.stringify({
            email: this.state.signInEmail,
            password:this.state.signInPassword
        })
    })
-   .then(response=>response.json())
+   .then(response => response.json())
    .then(data =>{
-       if(data === 'Success') {
+       if(data) {
+           console.log('The ID is',data.id)
+           
+           this.props.loadUser(data)
            this.props.onRouteChange('home')
+           
        }
    })
     

@@ -33,6 +33,7 @@ app.get('/',(req,res)=>{
 
 app.post('/signin',(req,res)=>{
     if(req.body.email === database.users[0].email && req.body.password === database.users[0].password){
+        // res.json(database.users.id)
         res.json('Success')
     }else {
             res.json('Error Logging In')
@@ -42,20 +43,16 @@ app.post('/signin',(req,res)=>{
 app.post('/register',(req,res)=>{
     const {name, email, password} = req.body;
 
-    bcrypt.hash(password, saltRounds, function(err, hash) {
-        console.log(hash)
-    });
-
     database.users.push(
         {
         id : '3',
         name: name,
         email: email,
-        password: password,
         entries: 0,
         joined: new Date()
     })
     res.json(database.users[database.users.length-1])
+    res.json('success')
 })
 
 app.get('/profile/:id',(req, res)=>{
@@ -74,22 +71,19 @@ app.get('/profile/:id',(req, res)=>{
     }
 })
 
-app.put('/image',(req,res)=>{
-    const {id} = req.body
-    let found = false
+app.post('/image',(req,res)=>{
+
     database.users.forEach(user=>{
-        if(user.id === id){
+        if(user.email === req.body.email){
             user.entries++
-            found = true
-            return res.json(user.entries)
+            // console.log(user.id)
+            res.json(user)
             
         }
     })
-    if(!found){
-        res.json(`Such user doesn't exist`)
-    }
+    res.json('nope')
 })
 
-app.listen(3001,()=>{
-    console.log('Connected on port 3001.')
+app.listen(3434,()=>{
+    console.log('Connected on port 3434.')
 })
