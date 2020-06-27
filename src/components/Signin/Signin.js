@@ -26,12 +26,9 @@ onSubmit=()=>{
    })
    .then(response => response.json())
    .then(data =>{
-       if(data) {
-           console.log('The ID is',data.id)
-           
+       if(data.id) {
            this.props.loadUser(data)
-           this.props.onRouteChange('home')
-           
+           this.props.onRouteChange('home') 
        }
    })
     

@@ -32,9 +32,9 @@ app.get('/',(req,res)=>{
 })
 
 app.post('/signin',(req,res)=>{
-    if(req.body.email === database.users[0].email && req.body.password === database.users[0].password){
+    if(req.body.email === database.users[1].email && req.body.password === database.users[1].password){
         // res.json(database.users.id)
-        res.json('Success')
+        res.json(database.users[1])
     }else {
             res.json('Error Logging In')
         }
@@ -72,16 +72,20 @@ app.get('/profile/:id',(req, res)=>{
 })
 
 app.post('/image',(req,res)=>{
-
+    const {id} = req.body
+    let found = false
     database.users.forEach(user=>{
-        if(user.email === req.body.email){
+        if(user.id === id){
+            found = true
             user.entries++
             // console.log(user.id)
-            res.json(user)
+            res.json(user.entries)
             
         }
     })
-    res.json('nope')
+    if(!found){
+    res.status(400).json('Not Found')
+    }
 })
 
 app.listen(3434,()=>{
