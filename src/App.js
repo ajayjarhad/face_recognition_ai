@@ -48,7 +48,7 @@ class App extends Component {
     ).then(response => {
       if (response) {
         fetch('http://localhost:3434/image', {
-          method: 'post',
+          method: 'put',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
             id: this.state.user.id
