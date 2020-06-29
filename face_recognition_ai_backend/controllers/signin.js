@@ -1,6 +1,11 @@
 const handleSignin = (req,res,db,bcrypt,saltRounds) =>{
 
 const {email,password} = req.body
+
+if(!email || !password){
+    return res.json('Empty input').status(400)
+}
+
 db.select('hash', 'email').from('login')
 .where('email', '=',email)
 .then(data => {

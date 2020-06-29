@@ -32,6 +32,8 @@ app.get('/profile/:id',(req, res)=>{profile.handleProfiles(req,res,db)})
 
 app.put('/image',(req,res)=>{image.handleImage(req,res,db)})
 
+app.post('/imageurl', (req, res)=>{image.handleApiCalls(req,res)})
+
 app.listen(3434,()=>{
     console.log('Connected on port 3434.')
 })
