@@ -10,7 +10,6 @@ const handleApiCalls = (req, res) =>{
         req.body.input
       )
       .then(data => {
-        console.log(req.body)
           res.json(data)
       })
 }
