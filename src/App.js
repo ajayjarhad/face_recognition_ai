@@ -16,24 +16,24 @@ const ParticlesOption = {"particles":{"number":{"value":30,"density":{"enable":t
 const app = new Clarifai.App({
   apiKey: 'e242210386b14b15a85b870be21964ec'
 })
-
+const initialState = {
+  input : '',
+  imageUrl: '',
+  box:{},
+  route : 'signin',
+  isSignedIn:false,
+  user:{
+    id : '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  }
+}
 class App extends Component {
   constructor(){
     super()
-      this.state = {
-        input : '',
-        imageUrl: '',
-        box:{},
-        route : 'signin',
-        isSignedIn:false,
-        user:{
-          id : '',
-          name: '',
-          email: '',
-          entries: 0,
-          joined: ''
-        }
-    }
+      this.state = initialState
   }
 
   onInputChange = (event) =>{
@@ -58,6 +58,7 @@ class App extends Component {
           .then(count => {
             this.setState(Object.assign(this.state.user, { entries: count}))
           })
+          .catch(err => console.log(err))
 
       }
       this.displayTheBox(this.calculateFaceLocation(response))
