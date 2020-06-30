@@ -1,3 +1,9 @@
+## face_recognition_ai
+
+Test username and password is :
+username: user@email.com
+password: pass
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
