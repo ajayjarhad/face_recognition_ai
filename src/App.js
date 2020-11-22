@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import './App.css';
+
 
 import Navigation from './components/Navigation/Navigation'
 import Logo from './components/Logo/Logo'
@@ -8,7 +8,7 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
 import Signin from './components/Signin/Signin'
 import Register from './components/Register/Register'
-
+import './App.css';
 import Particles from 'react-particles-js';
 const ParticlesOption = {"particles":{"number":{"value":30,"density":{"enable":true,"value_area":800}}}}
 
@@ -16,8 +16,8 @@ const initialState = {
   input : '',
   imageUrl: '',
   boxes:[],
-  route : 'signin',
-  isSignedIn:false,
+  route : 'home',
+  isSignedIn:true,
   user:{
     id : '',
     name: '',
@@ -38,7 +38,8 @@ class App extends Component {
   
   onButtonSubmit = () =>{
     this.setState({imageUrl: this.state.input})
-    fetch('https://nameless-shore-94252.herokuapp.com/imageurl',{
+   // fetch('https://nameless-shore-94252.herokuapp.com/imageurl',{
+    fetch('http://localhost:3552/imageurl',{
       method: 'post',
       headers: {'Content-Type':'application/json'},
     body: JSON.stringify({input:this.state.input})
@@ -46,7 +47,8 @@ class App extends Component {
     .then(response => response.json())
     .then(response => {
       if (response) {
-        fetch('https://nameless-shore-94252.herokuapp.com/image', {
+        // fetch('https://nameless-shore-94252.herokuapp.com/image', {
+          fetch('http://localhost:3552/image', {
           method: 'put',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
@@ -66,7 +68,9 @@ class App extends Component {
   }
 
   onRouteChange = (route) => {
-    if(route === 'signout') this.setState({isSignedIn:false})
+    if (route === 'signout') {
+      return this.setState({ initialState })
+    }
     else if (route === 'home') this.setState({isSignedIn:true})
     this.setState({route:route})
   }
