@@ -8,6 +8,8 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
 import Signin from './components/Signin/Signin'
 import Register from './components/Register/Register'
+import Modal from './components/Modal/Modal'
+import Profile from './components/Profile/Profile'
 import './App.css';
 import Particles from 'react-particles-js';
 const ParticlesOption = {"particles":{"number":{"value":30,"density":{"enable":true,"value_area":800}}}}
@@ -16,14 +18,17 @@ const initialState = {
   input : '',
   imageUrl: '',
   boxes:[],
-  route : 'home',
+  route: 'home',
+  isProfileOpen : false,
   isSignedIn:true,
   user:{
     id : '',
     name: '',
     email: '',
     entries: 0,
-    joined: ''
+    joined: '',
+    pet: '',
+    age: ''
   }
 }
 class App extends Component {
@@ -75,6 +80,13 @@ class App extends Component {
     this.setState({route:route})
   }
 
+  toggleModal = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      isProfileOpen: !prevState.isProfileOpen
+    }))
+  }
+
   calculateFaceLocations = (data) =>{
     return data.outputs[0].data.regions.map(face => {
           const clarifaiFace = face.region_info.bounding_box
@@ -107,14 +119,20 @@ class App extends Component {
   }
   render()
   {
-   const { isSignedIn,imageUrl,boxes,route } = this.state
+   const { isSignedIn,imageUrl,boxes,route, isProfileOpen,user } = this.state
     return (
     <div className="App">
        <Particles className='particles' 
       params={ParticlesOption}
        />
-       <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}/>
-      {route === 'home' ?
+        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}
+          toggleModal={this.toggleModal}
+        />
+      {isProfileOpen ?             <Modal>
+              <Profile isProfileOpen={isProfileOpen} toggleModal={this.toggleModal} user={user} />
+              </Modal> : null}
+        
+        {route === 'home' ?
             <div>
             <Logo />
             <Rank 
