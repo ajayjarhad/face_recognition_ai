@@ -15,25 +15,29 @@ onSignInEmail=(event)=>{
 onSignInPassword=(event)=>{
     this.setState({signInPassword: event.target.value})
 }
-onSubmit=()=>{
-//    fetch('https://nameless-shore-94252.herokuapp.com/signin',{
-    fetch('http://localhost:3552/signin',{
-       method: 'post',
-       headers:{'Content-Type': 'application/json'},
-       body: JSON.stringify({
-           email: this.state.signInEmail,
-           password:this.state.signInPassword
-       })
-   })
-   .then(response => response.json())
-   .then(data =>{
-       if(data.id) {
-           this.props.loadUser(data)
-           this.props.onRouteChange('home') 
-       }
-   })
-    
-}
+saveAuthTokenInSessions = (token) => {
+    window.sessionStorage.setItem('token', token);
+  }
+
+  onSubmit = () => {
+    fetch('http://localhost:3552/signin', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        email: this.state.signInEmail,
+        password: this.state.signInPassword
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.success === "true") {
+          this.saveAuthTokenInSessions(data.token)
+          this.props.loadUser(data.user)
+          this.props.onRouteChange('home');
+        }
+      })
+      .catch(console.log)
+  }
     render() {
         return(
             <article className="br3 ba dark-gray b--white-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
@@ -56,7 +60,7 @@ onSubmit=()=>{
                         />
                         </div>
                         <div className="lh-copy mt3">
-                        <p  className="f6 link dim white db pointer">Register</p>
+                        <p  onClick={() => this.props.onRouteChange('register')} className="f6 link dim black db pointer">Register</p>
                         </div>
                     </div>
                 </main>

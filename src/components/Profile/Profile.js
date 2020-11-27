@@ -12,39 +12,44 @@ class Profile extends React.Component {
     }
 
 
-    onFormChange = (event) => {
-        switch (event.target.name) {
-            case 'user-name':
-                this.setState(
-                    { name: event.target.value }
-                )
-                break;
-            case 'user-age':
-                this.setState({ age: event.target.value })
-                break;
-            case 'user-pet':
-                this.setState({ pet: event.target.value })
-                break;
-            default:
-                return;
-        }
-    }
-
     onProfileUpdate = (data) => {
-        fetch(`http://localhost:3000/profile/${this.props.user.id}`, {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({formInput: data})
+        fetch(`http://localhost:3552/profile/${this.props.user.id}`, {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': window.sessionStorage.getItem('token')
+          },
+          body: JSON.stringify({
+            formInput: data
+          })
         }).then(resp => {
+          if (resp.status === 200 || resp.status === 304) {
             this.props.toggleModal();
-            this.props.loadUser({...this.state.user, ...data})
+            this.props.loadUser({ ...this.props.user, ...data });
+          }
         }).catch(console.log)
-    }
-
+      }
+    
+      onFormChange = (event) => {
+        switch(event.target.name) {
+          case 'user-name':
+            this.setState({name: event.target.value})
+            break;
+          case 'user-age':
+            this.setState({age: event.target.value})
+            break;
+          case 'user-pet':
+            this.setState({pet: event.target.value})
+            break;
+          default:
+            return;
+        }
+      }
+    
 
     render()
     {
-        const { isProfileOpen, toggleModal, user } = this.props
+        const { toggleModal, user } = this.props
         const { name,age,pet } = this.state
         return (
             <div className="profile-modal">
@@ -87,7 +92,7 @@ class Profile extends React.Component {
                             />
                             <div className='mt4' style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                                 <button
-                                    onClick={()=>this.onProfileUpdate({name,age,pet})}
+                                     onClick={() => this.onProfileUpdate({name, age, pet})}
                                     className='b pa2 grow pointer hover-white w-40 bg-light-green b--black-20'>Save</button>
                                 <button className='b pa2 grow pointer hover-white w-40 bg-light-red b--black-20'
                                     onClick={toggleModal}

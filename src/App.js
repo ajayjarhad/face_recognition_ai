@@ -18,9 +18,9 @@ const initialState = {
   input : '',
   imageUrl: '',
   boxes:[],
-  route: 'home',
+  route: 'signin',
   isProfileOpen : false,
-  isSignedIn:true,
+  isSignedIn:false,
   user:{
     id : '',
     name: '',
@@ -37,6 +37,41 @@ class App extends Component {
       this.state = initialState
   }
 
+  
+  componentDidMount() {
+    const token = window.sessionStorage.getItem('token');
+    if (token) {
+      fetch('http://localhost:3552/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.id) {
+            fetch(`http://localhost:3552/profile/${data.id}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+              }
+            })
+            .then(response => response.json())
+            .then(user => {
+              if (user && user.email) {
+                this.loadUser(user)
+                this.onRouteChange('home');
+              }
+            })
+          }
+        })
+        .catch(console.log)
+    }
+  }
+
+
   onInputChange = (event) =>{
     this.setState({input:event.target.value})
   }
@@ -46,7 +81,10 @@ class App extends Component {
    // fetch('https://nameless-shore-94252.herokuapp.com/imageurl',{
     fetch('http://localhost:3552/imageurl',{
       method: 'post',
-      headers: {'Content-Type':'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': window.sessionStorage.getItem('token')
+      },
     body: JSON.stringify({input:this.state.input})
     })
     .then(response => response.json())
@@ -55,7 +93,11 @@ class App extends Component {
         // fetch('https://nameless-shore-94252.herokuapp.com/image', {
           fetch('http://localhost:3552/image', {
           method: 'put',
-          headers: {'Content-Type': 'application/json'},
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': window.sessionStorage.getItem('token')
+            },
+          
           body: JSON.stringify({
             id: this.state.user.id
           })
@@ -87,25 +129,30 @@ class App extends Component {
     }))
   }
 
-  calculateFaceLocations = (data) =>{
-    return data.outputs[0].data.regions.map(face => {
-          const clarifaiFace = face.region_info.bounding_box
-          const image = document.getElementById('inputImage')
-          const width = image.width;
-          const height = image.height;
-          return {
-            leftCol: clarifaiFace.left_col * width,
-            rightCol: width - (clarifaiFace.right_col * width),
-            topRow: clarifaiFace.top_row * height,
-            bottomRow: height - (clarifaiFace.bottom_row * height)
-          }
-    })
+  calculateFaceLocations = (data) => {
+    if (data && data.outputs) {
+      
     
+      return data.outputs[0].data.regions.map(face => {
+        const clarifaiFace = face.region_info.bounding_box
+        const image = document.getElementById('inputImage')
+        const width = image.width;
+        const height = image.height;
+        return {
+          leftCol: clarifaiFace.left_col * width,
+          rightCol: width - (clarifaiFace.right_col * width),
+          topRow: clarifaiFace.top_row * height,
+          bottomRow: height - (clarifaiFace.bottom_row * height)
+        }
+      })
+    }
+    return
 
   }
 
   displayTheBoxes = (boxes) => {
-    this.setState({boxes:boxes})
+    if(boxes){ this.setState({boxes:boxes})}
+   
   }
 
   loadUser = (data) => {
