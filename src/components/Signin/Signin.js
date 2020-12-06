@@ -40,12 +40,8 @@ saveAuthTokenInSessions = (token) => {
   }
 
     enterKey = (event) => {
-        if (event.key === 'Enter') {
-            
-            console.log('enter press here! ')
-            this.onSubmit();
-            
-       
+        if (event.key === 'Enter') { 
+            this.onSubmit();   
     }
 }
     
