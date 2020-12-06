@@ -1,74 +1,60 @@
-## face_recognition_ai
+## Face Detection AI Full stack App
 
-Test username and password is :
-username: user@email.com
+### Description
+
+This web app uses React.js for frontend and Node.js + Express.js server at the backend and I have used postgresSQL to manage users, the app uses Redis to session management, redis sends a JWT that gets stored on the session storage of browser and user can log back in without having to sign in everytime. The app also used AWS's Lambda function to generate the badges, where each time user makes a search request he will get a badge ranging from [😃', '😄', '😀', '😊' , '😉', '😍', '🔵', '🟡', '💖']. The score 10+ will have a contant badge of 💖. The app allows to renaming of the name from 'View Profile' and add pet name and age.
+
+[Backend's Link](https://github.com/ajayjarhad/face_recognition_ai_backend)
+
+
+To test the app you can use the following login credentials 
+```sh
+username: admin@email.com
 password: pass
+```
+Or you can register as a new user 😊
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### API's used
+Clarify
 
-## Available Scripts
+### How to Builld
+Run Script
+```sh
+$ npm start
+```
+Production build script
+```sh
+$ npm build
+```
 
-In the project directory, you can run:
+### Lambda Function I have used
+```sh
+'use strict';
 
-### `yarn start`
+const emoji = [
+  '😃', '😄', '😀', '😊' , '😉', '😍', '🔵', '🟡', '💖'
+]
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+module.exports.rank = async event => {
+  const rank = event.queryStringParameters.rank;
+  const rankEmoji = emoji[rank > emoji.length ? emoji.length - 1 : rank];
+  return {
 
-### `yarn test`
+    statusCode: 200,
+    headers:{
+         "Access-Control-Allow-Origin" : "*"
+    },
+    body: JSON.stringify(
+      {
+        message: 'Go Serverless v1.0! Your function executed successfully!',
+        input: rankEmoji
+      },
+      null,
+      2
+    ),
+  };
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
 
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+This project is hosted on netlify (Pretty cool host to host JAM stack website) and backend is hosted on AWS.
