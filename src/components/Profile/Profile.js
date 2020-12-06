@@ -13,7 +13,7 @@ class Profile extends React.Component {
 
 
     onProfileUpdate = (data) => {
-        fetch(`http://65.0.134.91:3552/profile/${this.props.user.id}`, {
+        fetch(`https://backend.ajayjarhad.com/profile/${this.props.user.id}`, {
           method: 'post',
           headers: {
             'Content-Type': 'application/json',
