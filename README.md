@@ -8,9 +8,10 @@ This web app uses React.js for frontend and Node.js + Express.js server at the b
 
 
 To test the app you can use the following login credentials 
+```sh
 username: admin@email.com
 password: pass
-
+```
 Or you can register as a new user 😊
 
 ### API's used
