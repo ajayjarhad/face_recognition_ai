@@ -41,7 +41,7 @@ class App extends Component {
   componentDidMount() {
     const token = window.sessionStorage.getItem('token');
     if (token) {
-      fetch('http://localhost:3552/signin', {
+      fetch('http://65.0.134.91:3552/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ class App extends Component {
         .then(response => response.json())
         .then(data => {
           if (data && data.id) {
-            fetch(`http://localhost:3552/profile/${data.id}`, {
+            fetch(`http://65.0.134.91:3552/profile/${data.id}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ class App extends Component {
   onButtonSubmit = () =>{
     this.setState({imageUrl: this.state.input})
    // fetch('https://nameless-shore-94252.herokuapp.com/imageurl',{
-    fetch('http://localhost:3552/imageurl',{
+    fetch('http://65.0.134.91:3552/imageurl',{
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ class App extends Component {
     .then(response => {
       if (response) {
         // fetch('https://nameless-shore-94252.herokuapp.com/image', {
-          fetch('http://localhost:3552/image', {
+          fetch('http://65.0.134.91:3552/image', {
           method: 'put',
             headers: {
               'Content-Type': 'application/json',
